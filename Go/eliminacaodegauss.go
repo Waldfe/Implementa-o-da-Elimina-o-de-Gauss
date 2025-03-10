@@ -37,4 +37,36 @@ func gaussSolver(n int, A [][]float64, b []float64) []float64 {
 		for i := k + 1; i < n; i++ {
 			factor := -A[i][k] / A[k][k]
 			A[i][k] = 0
-			b[i] += factor *
+			b[i] += factor * b[k]
+			for j := k + 1; j < n; j++ {
+				A[i][j] += factor * A[k][j]
+			}
+		}
+	}
+
+	// Resolução do sistema
+	for i := n - 1; i >= 0; i-- {
+		X[i] = b[i]
+		for j := i + 1; j < n; j++ {
+			X[i] -= A[i][j] * X[j]
+		}
+		X[i] /= A[i][i]
+	}
+
+	return X
+}
+
+func main() {
+	A := [][]float64{
+		{2, 1, -1},
+		{1, 2, 1},
+		{1, 1, 1},
+	}
+	b := []float64{-3, 3, 2}
+
+	result := gaussSolver(3, A, b)
+	fmt.Println("Solução:")
+	for i, x := range result {
+		fmt.Printf("x%d = %.6f\n", i+1, x)
+	}
+}
