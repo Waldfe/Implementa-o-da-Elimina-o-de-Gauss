@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"math/rand"
 )
 
 func gaussSolver(n int, A [][]float64, b []float64) []float64 {
@@ -57,16 +58,64 @@ func gaussSolver(n int, A [][]float64, b []float64) []float64 {
 }
 
 func main() {
-	A := [][]float64{
-		{2, 1, -1},
-		{1, 2, 1},
-		{1, 1, 1},
+	testCases := []struct {
+		A [][]float64
+		b []float64
+	}{
+		{
+			A: [][]float64{
+				{2, 1, -1},
+				{1, 2, 1},
+				{1, 1, 1},
+			},
+			b: []float64{-3, 3, 2},
+		},
+		{
+			A: [][]float64{
+				{1, 1, 1},
+				{-2, 1, 1},
+				{1, 3, 1},
+			},
+			b: []float64{2, 5, 4},
+		},
+		{
+			A: [][]float64{
+				{3, 2, -1},
+				{2, -2, 4},
+				{-1, 0.5, -1},
+			},
+			b: []float64{1, -2, 0},
+		},
+		{
+			A: [][]float64{
+				{2, 3},
+				{4, 9},
+			},
+			b: []float64{6, 15},
+		},
+		{
+			A: [][]float64{
+				{4, 1, 2, -3},
+				{-3, 3, -1, 4},
+				{-1, 2, 5, 1},
+				{5, 4, 3, -1},
+			},
+			b: []float64{-16, 20, -4, -10},
+		},
+		{
+			A: [][]float64{
+				{4, 1, 2, -3, 5},
+				{-3, 3, -1, 4, -2},
+				{-1, 2, 5, 1, 3},
+				{5, 4, 3, -1, 2},
+				{1, -2, 3, -4, 5},
+			},
+			b: []float64{-16, 20, -4, -10, 3},
+		},
 	}
-	b := []float64{-3, 3, 2}
 
-	result := gaussSolver(3, A, b)
-	fmt.Println("Solução:")
-	for i, x := range result {
-		fmt.Printf("x%d = %.6f\n", i+1, x)
+	for i := 0; i < 1_000_000_000; i++ {
+		tc := testCases[rand.Intn(len(testCases))]
+		_ = gaussSolver(len(tc.A), tc.A, tc.b)
 	}
 }
