@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"os"
 )
 
 func gaussSolver(n int, A [][]float64, b []float64) []float64 {
@@ -58,63 +59,46 @@ func gaussSolver(n int, A [][]float64, b []float64) []float64 {
 }
 
 func main() {
-	testCases := []struct {
-		A [][]float64
-		b []float64
-	}{
-		{
-			A: [][]float64{
-				{2, 1, -1},
-				{1, 2, 1},
-				{1, 1, 1},
-			},
-			b: []float64{-3, 3, 2},
-		},
-		{
-			A: [][]float64{
-				{1, 1, 1},
-				{-2, 1, 1},
-				{1, 3, 1},
-			},
-			b: []float64{2, 5, 4},
-		},
-		{
-			A: [][]float64{
-				{3, 2, -1},
-				{2, -2, 4},
-				{-1, 0.5, -1},
-			},
-			b: []float64{1, -2, 0},
-		},
-		{
-			A: [][]float64{
-				{2, 3},
-				{4, 9},
-			},
-			b: []float64{6, 15},
-		},
-		{
-			A: [][]float64{
-				{4, 1, 2, -3},
-				{-3, 3, -1, 4},
-				{-1, 2, 5, 1},
-				{5, 4, 3, -1},
-			},
-			b: []float64{-16, 20, -4, -10},
-		},
-		{
-			A: [][]float64{
-				{4, 1, 2, -3, 5},
-				{-3, 3, -1, 4, -2},
-				{-1, 2, 5, 1, 3},
-				{5, 4, 3, -1, 2},
-				{1, -2, 3, -4, 5},
-			},
-			b: []float64{-16, 20, -4, -10, 3},
-		},
+	if len(os.Args) < 3 {
+		fmt.Printf("Uso: %s <tamanho> <número de testes>\n", os.Args[0])
+		return
 	}
 
-	for i := 0; i < 1_000_000_000; i++ {
+	tamanho := 0
+	numeroDeTestes := 0
+
+	_, err1 := fmt.Sscanf(os.Args[1], "%d", &tamanho)
+	_, err2 := fmt.Sscanf(os.Args[2], "%d", &numeroDeTestes)
+
+	if err1 != nil || err2 != nil || tamanho <= 0 || numeroDeTestes <= 0 {
+		fmt.Println("N e M devem ser maiores que 0.")
+		return
+	}
+
+	// Generate 10 random test cases
+	testCases := make([]struct {
+		A [][]float64
+		b []float64
+	}, 10)
+
+	for t := 0; t < 10; t++ {
+		A := make([][]float64, tamanho)
+		b := make([]float64, tamanho)
+		for i := 0; i < tamanho; i++ {
+			A[i] = make([]float64, tamanho)
+			for j := 0; j < tamanho; j++ {
+				A[i][j] = rand.Float64()*20 - 10 // Random values between -10 and 10
+			}
+			b[i] = rand.Float64()*20 - 10 // Random values between -10 and 10
+		}
+		testCases[t] = struct {
+			A [][]float64
+			b []float64
+		}{A: A, b: b}
+	}
+
+	// Run one random test case numeroDeTestes times
+	for i := 0; i < numeroDeTestes; i++ {
 		tc := testCases[rand.Intn(len(testCases))]
 		_ = gaussSolver(len(tc.A), tc.A, tc.b)
 	}

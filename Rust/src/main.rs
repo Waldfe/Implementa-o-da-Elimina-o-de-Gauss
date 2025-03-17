@@ -1,4 +1,5 @@
 use rand::Rng;
+use std::env;
 
 fn gauss_solver(n: usize, mut a: Vec<Vec<f64>>, mut b: Vec<f64>) -> Vec<f64> {
     let mut x = vec![0.0; n];
@@ -52,59 +53,44 @@ fn gauss_solver(n: usize, mut a: Vec<Vec<f64>>, mut b: Vec<f64>) -> Vec<f64> {
 }
 
 fn main() {
-    let test_cases = vec![
-        (
-            vec![
-                vec![2.0, 1.0, -1.0],
-                vec![1.0, 2.0, 1.0],
-                vec![1.0, 1.0, 1.0],
-            ],
-            vec![-3.0, 3.0, 2.0],
-        ),
-        (
-            vec![
-                vec![1.0, 1.0, 1.0],
-                vec![-2.0, 1.0, 1.0],
-                vec![1.0, 3.0, 1.0],
-            ],
-            vec![2.0, 5.0, 4.0],
-        ),
-        (
-            vec![
-                vec![3.0, 2.0, -1.0],
-                vec![2.0, -2.0, 4.0],
-                vec![-1.0, 0.5, -1.0],
-            ],
-            vec![1.0, -2.0, 0.0],
-        ),
-        (
-            vec![vec![2.0, 3.0], vec![4.0, 9.0]],
-            vec![6.0, 15.0],
-        ),
-        (
-            vec![
-                vec![4.0, 1.0, 2.0, -3.0],
-                vec![-3.0, 3.0, -1.0, 4.0],
-                vec![-1.0, 2.0, 5.0, 1.0],
-                vec![5.0, 4.0, 3.0, -1.0],
-            ],
-            vec![-16.0, 20.0, -4.0, -10.0],
-        ),
-        (
-            vec![
-                vec![4.0, 1.0, 2.0, -3.0, 5.0],
-                vec![-3.0, 3.0, -1.0, 4.0, -2.0],
-                vec![-1.0, 2.0, 5.0, 1.0, 3.0],
-                vec![5.0, 4.0, 3.0, -1.0, 2.0],
-                vec![1.0, -2.0, 3.0, -4.0, 5.0],
-            ],
-            vec![-16.0, 20.0, -4.0, -10.0, 3.0],
-        ),
-    ];
+
+    let args: Vec<String> = env::args().collect();
+    if args.len() != 3 {
+        eprintln!("Uso: {} <tamanho> <número de testes>", args[0]);
+        return;
+    }
+
+    let tamanho: usize = match args[1].parse() {
+        Ok(val) if val > 0 => val,
+        _ => {
+            eprintln!("'tamanho' deve ser um número maior que 0.");
+            return;
+        }
+    };
+
+    let numero_de_testes: usize = match args[2].parse() {
+        Ok(val) if val > 0 => val,
+        _ => {
+            eprintln!("'número de testes' deve ser um número maior que 0.");
+            return;
+        }
+    };
 
     let mut rng = rand::rng();
 
-    for _ in 0..1_000_000_000 {
+    // Gerar 10 casos de teste aleatórios
+    let test_cases: Vec<(Vec<Vec<f64>>, Vec<f64>)> = (0..10)
+        .map(|_| {
+            let a: Vec<Vec<f64>> = (0..tamanho)
+                .map(|_| (0..tamanho).map(|_| rng.random_range(-10.0..10.0)).collect())
+                .collect();
+            let b: Vec<f64> = (0..tamanho).map(|_| rng.random_range(-10.0..10.0)).collect();
+            (a, b)
+        })
+        .collect();
+
+    // Executar um caso de teste aleatório numeroDeTestes vezes
+    for _ in 0..numero_de_testes {
         let (a, b) = &test_cases[rng.random_range(0..test_cases.len())];
         let _resultado = gauss_solver(a.len(), a.clone(), b.clone());
     }

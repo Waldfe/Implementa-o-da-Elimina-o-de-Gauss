@@ -17,7 +17,11 @@
  * X é o vetor onde a solução será armazenada
  * Forma do sistema (matricial): Ax = b  
  */
-void gaussSolver(int n, double A[n][n], double b[n], double X[n]) {
+#ifndef __INTELLISENSE__
+ void gaussSolver(int n, double A[n][n], double b[n], double X[n]) {
+#else
+    void gaussSolver(int n, double A[1][1], double b[1], double X[1]) {
+#endif
     int i, j, k, l, m;
     //ETAPA DE ESCALONAMENTO
     for (k = 0; k < n - 1; k++) {
@@ -70,58 +74,56 @@ void gaussSolver(int n, double A[n][n], double b[n], double X[n]) {
         X[i] = X[i] / A[i][i];
     }
 }
+
 //Código de testes
-int main() {
-    srand(time(NULL));
-    int n;
-    double A[5][5], b[5], x[5];
-    for (int iter = 0; iter < 1000000000; iter++) {
-        int testCase = rand() % 6;
-        switch (testCase) {
-            case 0:
-                n = 3;
-                double A0[3][3] = {{2, 1, -1}, {1, 2, 1}, {1, 1, 1}};
-                double b0[3] = {-3, 3, 2};
-                memcpy(A, A0, sizeof(A0));
-                memcpy(b, b0, sizeof(b0));
-                break;
-            case 1:
-                n = 3;
-                double A1[3][3] = {{1, 1, 1}, {-2, 1, 1}, {1, 3, 1}};
-                double b1[3] = {2, 5, 4};
-                memcpy(A, A1, sizeof(A1));
-                memcpy(b, b1, sizeof(b1));
-                break;
-            case 2:
-                n = 3;
-                double A2[3][3] = {{3, 2, -1}, {2, -2, 4}, {-1, 0.5, -1}};
-                double b2[3] = {1, -2, 0};
-                memcpy(A, A2, sizeof(A2));
-                memcpy(b, b2, sizeof(b2));
-                break;
-            case 3:
-                n = 2;
-                double A3[2][2] = {{2, 3}, {4, 9}};
-                double b3[2] = {6, 15};
-                memcpy(A, A3, sizeof(A3));
-                memcpy(b, b3, sizeof(b3));
-                break;
-            case 4:
-                n = 4;
-                double A4[4][4] = {{4, 1, 2, -3}, {-3, 3, -1, 4}, {-1, 2, 5, 1}, {5, 4, 3, -1}};
-                double b4[4] = {-16, 20, -4, -10};
-                memcpy(A, A4, sizeof(A4));
-                memcpy(b, b4, sizeof(b4));
-                break;
-            case 5:
-                n = 5;
-                double A5[5][5] = {{4, 1, 2, -3, 5}, {-3, 3, -1, 4, -2}, {-1, 2, 5, 1, 3}, {5, 4, 3, -1, 2}, {1, -2, 3, -4, 5}};
-                double b5[5] = {-16, 20, -4, -10, 3};
-                memcpy(A, A5, sizeof(A5));
-                memcpy(b, b5, sizeof(b5));
-                break;
-        }
-        gaussSolver(n, A, b, x);
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        printf("Uso: %s <tamanho> <número de testes>\n", argv[0]);
+        return 1;
     }
+
+    long long tamanho = strtol(argv[1], NULL, 10);
+    long long numeroDeTestes = strtol(argv[2], NULL, 10);
+
+    if (tamanho <= 0 || numeroDeTestes <= 0) {
+        printf("N e M devem ser maiores que 0.\n");
+        return 1;
+    }
+
+    srand(time(NULL));
+
+    #ifndef __INTELLISENSE__
+    double testCases[10][tamanho][tamanho];
+    double testB[10][tamanho];
+    #else
+    double testCases[10][1][1];
+    double testB[10][1];
+    #endif
+
+    // Gerar 10 casos de teste aleatórios
+    for (int t = 0; t < 10; t++) {
+        for (int i = 0; i < tamanho; i++) {
+            for (int j = 0; j < tamanho; j++) {
+                testCases[t][i][j] = (rand() % 2001 - 1000) / 100.0; // valores entre -10.00 e 10.00
+            }
+            testB[t][i] = (rand() % 2001 - 1000) / 100.0; // valores entre -10.00 e 10.00
+        }
+    }
+
+    #ifndef __INTELLISENSE__
+    double A[tamanho][tamanho], b[tamanho], x[tamanho];
+    #else
+    double A[1][1], b[1], x[1];
+    #endif
+
+    // Executar numeroDeTestes vezes escolhendo um caso de teste aleatório
+    for (int iter = 0; iter < numeroDeTestes; iter++) {
+        int testCase = rand() % 10;
+        memcpy(A, testCases[testCase], sizeof(A));
+        memcpy(b, testB[testCase], sizeof(b));
+
+        gaussSolver(tamanho, A, b, x);
+    }
+
     return 0;
 }
