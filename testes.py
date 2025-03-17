@@ -2,15 +2,15 @@ import time
 import subprocess
 
 comandos_otimizado = {
-    "C": "./C/optimized.exe",
-    "Go": "./Go/optimized.exe",
-    "Rust":"./Rust/target/release/eliminacaodegauss.exe"
+    "C": "./C/optimized",
+    "Go": "./Go/optimized",
+    "Rust":"./Rust/target/release/eliminacaodegauss"
 }
 
 comandos_nao_otimizado = {
-    "C": "./C/unoptimized.exe",
-    "Go": "./Go/unoptimized.exe",
-    "Rust": "./Rust/target/debug/eliminacaodegauss.exe"
+    "C": "./C/unoptimized",
+    "Go": "./Go/unoptimized",
+    "Rust": "./Rust/target/debug/eliminacaodegauss"
 }
 
 tamanhos = [3, 5, 7, 9]
