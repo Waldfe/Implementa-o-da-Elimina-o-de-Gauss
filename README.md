@@ -1,4 +1,5 @@
 # Implementação-da-Eliminação-de-Gauss
+Implemetações em C, Go e Rust da eliminação de Gauss. Relatório em [Relatório.pdf](Relatório.pdf).
 ## Integrantes do grupo:
 - Felipe Leonardo Kerwald Santana
 - Kalani Sosa Pereira
