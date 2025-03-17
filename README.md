@@ -21,6 +21,6 @@ Binários para Windows já são disponibilizados neste repositório. Para realiz
 #### C
 Para compilar utilizando o GCC entre no diretório da implementação em C com `$ cd C` e execute `$ gcc ./eliminacaodegauss.c -O0 -o ./unoptimized` para uma build não otimizada e `$ gcc ./eliminacaodegauss.c -O3 -o ./optimized` para uma build otimizada.
 #### Go
-Para compilar utilizando o sistema de build da implementação de referência do Go ente no diretório da implementação em Go com `$ cd Go` e execute `$ go build -gcflags "-N -l" -o unoptimized` para uma build não otimizada e `$ go build -o optimized` para uma build otimizada.
+Para compilar utilizando o sistema de build da implementação de referência do Go entre no diretório da implementação em Go com `$ cd Go` e execute `$ go build -gcflags "-N -l" -o unoptimized` para uma build não otimizada e `$ go build -o optimized` para uma build otimizada.
 #### Rust
 Para compilar utilizando o Cargo entre no diretório da implementação em Rust com `$ cd Rust` e execute `$ cargo build` para uma build não otimizada e `$ cargo build --release` para uma build otimizada. Os executáveis da versão não otimizada e otimizada estarão em `./target/debug/eliminacaodegauss` e `./target/release/eliminacaodegauss`, respectivamente.
