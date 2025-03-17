@@ -1,5 +1,6 @@
-//GitHub: HenriqueIni
-//www.blogcyberini.com
+// Modificado de:
+// GitHub: HenriqueIni
+// www.blogcyberini.com
 
 #include <stdio.h>
 #include <stdlib.h>
